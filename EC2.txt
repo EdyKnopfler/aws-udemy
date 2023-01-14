@@ -1,0 +1,64 @@
+Elastic Compute Cloud (IaaS)
+
+EC2: máquinas virtuais
+ELB: load balancer
+ASG: autoscaling group
+EBS/EFS: discos em rede
+EC2 Instance Store: discos em hardware
+EC2 User Data: script de boot (primeira inicialização)
+- atualizações, pacotes, baixar arquivos...
+
+Regras de firewall no grupo de segurança.
+
+Nível gratuito: t2.micro (750h/mês)
+
+AMI: Amazon Machine Image (posso criar minhas próprias)
+Em "Início Rápido", selecione uma "qualificado para o nível gratuito".
+
+VPC: Virtual Private Cloud
+Função (role) IAM da instância :) (veja IAM.txt)
+
+Ao final do formulário de configuração: "Dados de usuário" (EC2 User Data).
+Amazon Linux é baseado em yum.
+
+yum update -y
+yum install -y httpd
+systemctl start httpd
+systemctl enable httpd
+echo "<h1>Olá, panguá!</h1>" > /var/www/html/index.html
+echo "<p>Eu sou a máquina <b>$(hostname -f)</b>.</p>" >> /var/www/html/index.html
+(não funcionou no User Data...)
+
+Stop/Restart: muda o IP público, mas não o privado.
+
+Tipos de instância:
+https://aws.amazon.com/pt/ec2/instance-types/
+https://instances.vantage.sh/
+
+m5.2xlarge
+
+m: classe (general purpose, compute optimized, ...)
+5: geração (conforme AWS evolui)
+2xlarge: tamanho dentro da (classe, geração) (CPU, memória, etc.)
+
+
+Grupos de segurança: parte fundamental da segurança de rede (firewall)
+São restritos a uma (região, VPC).
+Recomendação: ter um grupo separado para o acesso SSH.
+Aplicação não acessível (timeout): pode ser a configuração do grupo.
+Mensagem de "conexão recusada": o tráfego passou, problema na aplicação.
+Default: todo tráfego de entrada bloqueado, todo tráfego de saída permitido.
+Referência entre grupos: permitir/bloquear o grupo X significa permitir/bloquear as instâncias pertencentes ao grupo X.
+==> recurso útil quando usamos load balancers :)
+
+Função (role) IAM: execução de comandos AWS CLI
+==> configurar as credenciais PESSOAIS dentro da instância é uma ideia ruim
+
+Aquisição:
+Sob demanda: para trabalhos rápidos
+Para servidores, as Reservadas (mínimo 1 ano de uso) saem + baratas.
+==> Reservadas
+==> Reservadas conversíveis: podem ter seu tipo (T2...) mudado
+==> Agendadas: funcionarão em horários determinados :)
+Pontuais: sob demanda menos confiável e + barata
+Host dedicado: servidor físico

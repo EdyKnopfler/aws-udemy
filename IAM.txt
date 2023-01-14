@@ -1,0 +1,63 @@
+IAM
+
+Usuário (n) <--------------> (n) Grupo
+	|(1)                        (1)|
+	|       (n)          (n)       |
+     ---------- Política ----------
+                 (JSON)
+                 
+Painel de login para os usuários desta conta:
+https://ederson-pessoal.signin.aws.amazon.com/console 
+        |-------------|
+         alias da conta
+
+
+Uma política é composta de Statements.
+O statement contém:
+- sid: identificador
+- efeito: permitir/negar
+- principal: conta, usuário ou papel ao qual se aplica
+- ações permitidas ou negadas
+- resources ao qual as ações se aplicam
+
+No vídeo, estão abertos 2 browsers, um com o root e outro com o usuário do IAM.
+O root mexe com as políticas do usuário e define o que ele pode ou não fazer.
+
+Exemplo de política predefinida:
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "ec2:Describe*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "elasticloadbalancing:Describe*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "cloudwatch:ListMetrics",
+                "cloudwatch:GetMetricStatistics",
+                "cloudwatch:Describe*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "autoscaling:Describe*",
+            "Resource": "*"
+        }
+    ]
+}
+
+Criamos uma chave para o usuário IAM;
+$ aws configure   # coloca as credenciais
+$ aws iam list-users
+
+Roles (Funções) do IAM: para uso dos serviços, ex.: EC2, Lambda
+Relatórios: nível da conta e do usuário
